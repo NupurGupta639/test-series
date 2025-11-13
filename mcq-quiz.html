@@ -1,0 +1,277 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>MCQ Quiz - Internet, WWW & Gmail</title>
+  <style>
+    body {
+      font-family: Poppins, sans-serif;
+      background: linear-gradient(135deg, #e3f2fd, #fce4ec);
+      color: #222;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 900px;
+      margin: 40px auto;
+      background: #ffffff;
+      border-radius: 16px;
+      padding: 30px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+      position: relative;
+    }
+    h1 {
+      text-align: center;
+      color: #0056d6;
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.1);
+    }
+    .login-box {
+      text-align: center;
+    }
+    input {
+      padding: 10px;
+      margin: 8px;
+      width: 80%;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      transition: all 0.3s ease;
+    }
+    input:focus {
+      border-color: #007bff;
+      box-shadow: 0 0 6px rgba(0,123,255,0.3);
+      outline: none;
+    }
+    button {
+      padding: 10px 18px;
+      margin-top: 10px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      background: linear-gradient(45deg, #007bff, #00c6ff);
+      color: #fff;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+    button:hover {
+      background: linear-gradient(45deg, #0056d6, #0099ff);
+      transform: scale(1.03);
+    }
+    .question {
+      font-size: 20px;
+      margin: 10px 0 15px;
+      color: #333;
+      font-weight: 600;
+    }
+    .option {
+      padding: 12px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      margin: 8px 0;
+      cursor: pointer;
+      background: #fafafa;
+      transition: all 0.3s ease;
+    }
+    .option:hover {
+      background: #fff3cd;
+    }
+    .option.selected {
+      background: #fff59d; /* yellow when selected */
+      border-color: #fbc02d;
+    }
+    .option.correct {
+      background: #d1fae5;
+      border-color: #10b981;
+      color: #0f5132;
+    }
+    .option.incorrect {
+      background: #fee2e2;
+      border-color: #ef4444;
+      color: #842029;
+    }
+    .btns {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 15px;
+    }
+    .hidden {
+      display: none;
+    }
+    .result {
+      text-align: center;
+      font-size: 22px;
+      color: #007500;
+      font-weight: 600;
+    }
+    /* Timer */
+    #timer {
+      position: absolute;
+      top: 20px;
+      right: 30px;
+      font-size: 18px;
+      background: #e3f2fd;
+      padding: 6px 12px;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      color: #007bff;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🌐 Internet, WWW & Gmail MCQ Quiz</h1>
+    <div id="timer" class="hidden">Time: 0s</div>
+
+    <div id="login" class="login-box">
+      <h2>Enter Your Details</h2>
+      <input type="text" id="studentName" placeholder="Enter your name"><br>
+      <input type="text" id="fatherName" placeholder="Enter father's name"><br>
+      <button onclick="startQuiz()">Start Quiz</button>
+    </div>
+
+    <div id="quiz" class="hidden">
+      <div id="questionBox"></div>
+      <div class="btns">
+        <button id="checkBtn" onclick="checkAnswer()">Check</button>
+        <button id="nextBtn" onclick="nextQuestion()">Next</button>
+      </div>
+    </div>
+
+    <div id="resultBox" class="hidden result"></div>
+  </div>
+
+<script>
+const questions = [
+  {q:'The Internet is called a ______.',opt:['Network of computers','Network of networks','Network of users','Local network'],ans:1},
+  {q:'Who developed the Internet?',opt:['Tim Berners-Lee','Vint Cerf & Bob Kahn','Bill Gates','Charles Babbage'],ans:1},
+  {q:'The “Fathers of the Internet” are:',opt:['Steve Jobs','Bob Kahn','Vint Cerf & Bob Kahn','Tim Berners-Lee'],ans:2},
+  {q:'TCP/IP means:',opt:['Transmission Control Protocol / Internet Protocol','Transfer Control Program / Internet Path','Transfer Communication Process','Transmission Communication Program'],ans:0},
+  {q:'ARPANET started in:',opt:['1959','1969','1989','1999'],ans:1},
+  {q:'ARPANET was made by:',opt:['NASA','U.S. Department of Defense','Microsoft','Google'],ans:1},
+  {q:'WWW stands for:',opt:['Wide Web World','World Wide Web','Web World Wide','Wireless Web World'],ans:1},
+  {q:'Who invented the World Wide Web?',opt:['Tim Berners-Lee','Vint Cerf','Bob Kahn','Bill Gates'],ans:0},
+  {q:'The World Wide Web started in the year:',opt:['1969','1983','1991','2001'],ans:2},
+  {q:'WWW shows websites using:',opt:['HTTP','HTML','URL','All of these'],ans:3},
+  {q:'The secure version of HTTP is:',opt:['HTS','HTTPS','HTPS','HTTPX'],ans:1},
+  {q:'HTML means:',opt:['Hyper Text Making Language','Hyper Text Markup Language','High Transfer Markup Language','Hyper Tag Mark Language'],ans:1},
+  {q:'URL is used for:',opt:['Website address','File sharing','Password saving','Browser setting'],ans:0},
+  {q:'“.edu” domain is used for:',opt:['Entertainment','Education','Editor','Electronic'],ans:1},
+  {q:'“.gov” domain is used for:',opt:['Government','Gaming','General','Gmail'],ans:0},
+  {q:'“.in” domain belongs to which country?',opt:['Indonesia','India','Ireland','Italy'],ans:1},
+  {q:'The “S” in HTTPS means:',opt:['Safe','Secure','Server','System'],ans:1},
+  {q:'In a URL, webpage path starts after which symbol?',opt:['?','/','#','&'],ans:1},
+  {q:'In YouTube link “watch?v=abcd”, “v=” shows:',opt:['Website name','Video code','Password','Page title'],ans:1},
+  {q:'What is the main work of a web browser?',opt:['Make websites','Show websites','Run servers','Store passwords'],ans:1},
+  {q:'Maximum email attachment size in Gmail is:',opt:['10MB','15MB','25MB','50MB'],ans:2},
+  {q:'For large files, Gmail uses:',opt:['Google Docs','Google Photos','Google Drive','YouTube'],ans:2},
+  {q:'“Spam” folder keeps:',opt:['Important mails','Fraud or junk mails','Draft mails','Deleted mails'],ans:1},
+  {q:'“Drafts” folder is used for:',opt:['Sent mails','Unsent mails','Deleted mails','Old mails'],ans:1},
+  {q:'“Starred” folder contains:',opt:['Deleted mails','Important mails','Spam mails','All mails'],ans:1},
+  {q:'Gmail gives free storage of:',opt:['5GB','10GB','15GB','25GB'],ans:2},
+  {q:'The first step to create a Gmail account is:',opt:['Open browser and go to gmail.com','Fill OTP','Create password','Fill recovery email'],ans:0},
+  {q:'A strong Gmail password must include:',opt:['Only letters','Only numbers','Letters, numbers & special symbols','Only small letters'],ans:2},
+  {q:'“CC” in email means:',opt:['Contact Copy','Carbon Copy','Central Copy','Custom Copy'],ans:1},
+  {q:'“BCC” is used to:',opt:['Show all emails','Hide other email addresses','Block mails','Copy mails'],ans:1},
+  {q:'“Labels” in Gmail are used to:',opt:['Delete files','Organize emails','Block spam','Save drafts'],ans:1},
+  {q:'“@” in email address separates:',opt:['Username & website','Two users','Two folders','Two accounts'],ans:0},
+  {q:'For video calls in Gmail, use:',opt:['Meet','YouTube','Calendar','Maps'],ans:0},
+  {q:'“Trash” folder automatically deletes after:',opt:['7 days','15 days','30 days','60 days'],ans:2},
+  {q:'A valid email must have:',opt:['Space','One @ and domain','Two @ symbols','Double dots'],ans:1},
+  {q:'The fastest and most accurate search engine is:',opt:['Bing','Google','Yahoo','Ask.com'],ans:1},
+  {q:'Which search engine gives rewards to users?',opt:['DuckDuckGo','Ecosia','Bing','Baidu'],ans:2},
+  {q:'Which search engine does not track users?',opt:['Yahoo','DuckDuckGo','Baidu','Ask.com'],ans:1},
+  {q:'Ecosia plants trees and is based in:',opt:['China','USA','Germany','Japan'],ans:2},
+  {q:'Yandex is most popular in:',opt:['Japan','Russia','China','Korea'],ans:1},
+  {q:'Baidu is most used in:',opt:['India','USA','China','Russia'],ans:2},
+  {q:'Anonymous Google results are given by:',opt:['StartPage','AOL','Bing','Brave'],ans:0},
+  {q:'Chrome browser is made by:',opt:['Edge','Google','Firefox','Apple'],ans:1},
+  {q:'Which browser is open-source and privacy-friendly?',opt:['Chrome','Firefox','Opera','Edge'],ans:1},
+  {q:'Which browser has AI tools and reading mode?',opt:['Edge','Chrome','Safari','Brave'],ans:0},
+  {q:'Opera browser offers:',opt:['VPN & Battery Saver','Only search','File editing','Games'],ans:0},
+  {q:'Brave browser blocks:',opt:['Ads & Trackers','Passwords','Bookmarks','Files'],ans:0},
+  {q:'Which browser is best for Apple devices?',opt:['Chrome','Safari','Opera','Edge'],ans:1},
+  {q:'UC Browser is popular because it is:',opt:['Slow','Fast and small','Paid','Complicated'],ans:1},
+  {q:'Vivaldi browser is known for:',opt:['Custom design','Simple look','Speed','AI tools'],ans:0}
+];
+
+let current=0,score=0,selected=null;
+let timerInterval,seconds=0;
+
+const quiz=document.getElementById('quiz');
+const qBox=document.getElementById('questionBox');
+const timerBox=document.getElementById('timer');
+
+function startQuiz(){
+  const name=document.getElementById('studentName').value.trim();
+  const fname=document.getElementById('fatherName').value.trim();
+  if(!name||!fname){alert('Please enter both name and father\'s name');return;}
+  document.getElementById('login').classList.add('hidden');
+  quiz.classList.remove('hidden');
+  timerBox.classList.remove('hidden');
+  renderQuestion();
+  startTimer();
+}
+
+function renderQuestion(){
+  selected=null;
+  const q=questions[current];
+  qBox.innerHTML=`<div class='question'><b>Q${current+1}.</b> ${q.q}</div>`+
+    q.opt.map((o,i)=>`<div class='option' onclick='selectOption(${i})'>${o}</div>`).join('');
+  resetTimer();
+}
+
+function selectOption(i){
+  selected=i;
+  document.querySelectorAll('.option').forEach(opt=>opt.classList.remove('selected'));
+  document.querySelectorAll('.option')[i].classList.add('selected');
+}
+
+function checkAnswer(){
+  if(selected===null){alert('Please select an answer');return;}
+  const opts=document.querySelectorAll('.option');
+  opts.forEach((opt,i)=>{
+    if(i===questions[current].ans){opt.classList.add('correct');}
+    else if(i===selected){opt.classList.add('incorrect');}
+    opt.style.pointerEvents='none';
+  });
+  if(selected===questions[current].ans) score++;
+  stopTimer();
+}
+
+function nextQuestion(){
+  current++;
+  if(current>=questions.length){
+    showResult();
+  }else{
+    renderQuestion();
+  }
+}
+
+function showResult(){
+  quiz.classList.add('hidden');
+  timerBox.classList.add('hidden');
+  const percent=((score/questions.length)*100).toFixed(1);
+  document.getElementById('resultBox').classList.remove('hidden');
+  document.getElementById('resultBox').innerHTML=`You scored <b>${score}</b> out of <b>${questions.length}</b> (${percent}%)`;
+}
+
+/* Timer Functions */
+function startTimer(){
+  seconds=0;
+  timerBox.textContent=`Time: ${seconds}s`;
+  timerInterval=setInterval(()=>{
+    seconds++;
+    timerBox.textContent=`Time: ${seconds}s`;
+  },1000);
+}
+function stopTimer(){
+  clearInterval(timerInterval);
+}
+function resetTimer(){
+  stopTimer();
+  startTimer();
+}
+</script>
+</body>
+</html>
